@@ -1,0 +1,14 @@
+{
+  "name": "find-a-mentor-backend",
+  "version": "1.0.0",
+  "description": "A platform to find a mentor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Armaan Indani",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3"
+  }
+}
