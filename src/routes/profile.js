@@ -1,6 +1,7 @@
 const express = require("express");
 const ProfileController = require("../controllers/profileController");
 const ProfileUpdateController = require("../controllers/profileUpdateController");
+const validateToken = require("../middleware/validateTokenhandler");
 
 const profile = express.Router();
 

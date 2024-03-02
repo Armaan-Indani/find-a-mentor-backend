@@ -3,15 +3,9 @@ const bcrypt = require("bcrypt");
 
 const userSchema = mongoose.Schema(
   {
-    username: {
+    name: {
       type: String,
-      required: [true, "Please add the username"],
-      validate: {
-        validator: (str) => {
-          return str.length > 5 && str.length < 21;
-        },
-        message: "Username length must be between 5 to 20 charecters",
-      },
+      required: [true, "Please add the name"],
     },
     email: {
       type: String,
@@ -21,12 +15,6 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: [true, "Please enter the user password"],
-      validate: {
-        validator: (str) => {
-          return str.length > 7 && str.length < 21;
-        },
-        message: "Password length must be between 8 to 20 charecters",
-      },
     },
     usertype: {
       type: String,
@@ -38,37 +26,25 @@ const userSchema = mongoose.Schema(
         message: "Only mentor or mentee are the available options",
       },
     },
-    domain: [
-      {
-        type: String,
-        required: [true, "Please enter domain-name"],
+    domain: {
+      type: [
+        {
+          type: String,
+          required: [true, "Please enter domain-name"],
+        },
+      ],
+      validate: {
+        validator: function (arr) {
+          return arr.length > 0;
+        },
+        message: "At least 1 domain is required",
       },
-    ],
-    validate: {
-      validator: function (arr) {
-        return arr.length > 0;
-      },
-      message: "At least 1 domain is required",
     },
   },
   {
     timestamps: true,
   }
 );
-
-User.pre("save", async (next) => {
-  const user = this;
-  if (!user.isModified("password")) {
-    return next();
-  }
-  try {
-    const hashed_pass = await bcrypt.hash(user.password, 10);
-    user.password = hashed_pass;
-    next();
-  } catch (e) {
-    return next(e);
-  }
-});
 
 const User = mongoose.model("User", userSchema);
 
