@@ -23,11 +23,11 @@ const SignUpController = asyncHandler(async (req, res) => {
     throw new Error("Password length must be 8 to 20 chars");
   }
 
-  const hashedPass = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
   const user = await User.create({
     name,
     email,
-    password: hashedPass,
+    password: hashedPassword,
     usertype,
     domain,
   });
@@ -36,10 +36,11 @@ const SignUpController = asyncHandler(async (req, res) => {
 
   if (user) {
     res.status(201);
+    res.json({ _id: user.id, email: user.email });
+  } else {
+    res.status(400);
+    throw new Error("User data is not valid");
   }
-
-  res.status(200);
-  res.json(user);
 });
 
 module.exports = SignUpController;
