@@ -4,7 +4,7 @@ const dotenv = require("dotenv").config();
 
 const validateToken = asyncHandler(async (req, res, next) => {
   let token;
-  let authHeader = req.headers.Authorization || req.headers.authHeader;
+  let authHeader = req.headers.Authorization || req.headers.authorization;
 
   if (authHeader && authHeader.startsWith("Bearer")) {
     token = authHeader.split(" ")[1];
@@ -20,6 +20,8 @@ const validateToken = asyncHandler(async (req, res, next) => {
     if (!token) {
       res.status(401);
       throw new Error("Token is missing");
+    } else {
+      console.log("User authorized");
     }
   }
 });

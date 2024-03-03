@@ -6,6 +6,6 @@ const validateToken = require("../middleware/validateTokenhandler");
 const profile = express.Router();
 
 profile.get("/", validateToken, ProfileController);
-profile.post("/update", validateToken, ProfileUpdateController);
+profile.put("/update", validateToken, ProfileUpdateController);
 
 module.exports = profile;
