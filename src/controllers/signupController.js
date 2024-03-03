@@ -32,9 +32,8 @@ const SignUpController = asyncHandler(async (req, res) => {
     domain,
   });
 
-  console.log(`User created for ${user}`);
-
   if (user) {
+    console.log(`User created for ${user}`);
     res.status(201);
     res.json({ _id: user.id, email: user.email });
   } else {

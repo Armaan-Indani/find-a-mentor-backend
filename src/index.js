@@ -7,12 +7,12 @@ const connectToDB = require("./config/connectToDB");
 const dotenv = require("dotenv").config();
 
 connectToDB();
+
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.json());
-
-//Connect to database
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
