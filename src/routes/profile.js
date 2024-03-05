@@ -5,12 +5,9 @@ const validateToken = require("../middleware/validateTokenhandler");
 
 const profile = express.Router();
 
-profile.get("/:id",validateToken, ProfileController);
-profile.put("/update", validateToken, ProfileUpdateController);
-
-// profile.get("/mentor/:id", ProfileController);
-// profile.put("/mentor/update", validateToken, ProfileUpdateController);
-// profile.get("/mentee/:id", ProfileController);
-// profile.put("/mentee/update", validateToken, ProfileUpdateController);
+profile.get("/mentor/:id", ProfileController.mentor);
+profile.put("/mentor/update", validateToken, ProfileUpdateController.mentor);
+profile.get("/mentee/:id", ProfileController.mentee);
+profile.put("/mentee/update", validateToken, ProfileUpdateController.mentee);
 
 module.exports = profile;

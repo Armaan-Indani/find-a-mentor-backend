@@ -1,10 +1,10 @@
-const express = require("express");
 const asyncHandler = require("express-async-handler");
-const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Mentor = require("../models/mentorModel");
+const Mentee = require("../models/menteeModel");
 
-const LoginController = asyncHandler(async (req, res) => {
+const MenteeLoginController = asyncHandler(async (req, res) => {
   let { email, password } = req.body;
   if (!email || !password) {
     res.status(400);
@@ -13,20 +13,19 @@ const LoginController = asyncHandler(async (req, res) => {
   email = email.trim();
   email = email.toLowerCase();
 
-  const user = await User.findOne({ email });
+  const mentee = await Mentee.findOne({ email });
 
-  if (!user) {
-    console.log("User not found");
+  if (!mentee) {
+    console.log("Mentee not found");
   }
 
-  if (user && (await bcrypt.compare(password, user.password))) {
+  if (mentee && (await bcrypt.compare(password, mentee.password))) {
     const accessToken = jwt.sign(
       {
         user: {
-          name: user.name,
-          email: user.email,
-          usertype: user.usertype,
-          domain: user.domain,
+          name: mentee.name,
+          email: mentee.email,
+          domain: mentee.domain,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -43,4 +42,43 @@ const LoginController = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = LoginController;
+const MentorLoginController = asyncHandler(async (req, res) => {
+  let { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400);
+    throw new Error("All fields are mandatory");
+  }
+  email = email.trim();
+  email = email.toLowerCase();
+
+  const mentor = await Mentor.findOne({ email });
+
+  if (!mentor) {
+    console.log("Mentor not found");
+  }
+
+  if (mentor && (await bcrypt.compare(password, mentor.password))) {
+    const accessToken = jwt.sign(
+      {
+        user: {
+          name: mentor.name,
+          email: mentor.email,
+          domain: mentor.domain,
+        },
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "30m",
+      }
+    );
+
+    res.status(200);
+    res.json({ accessToken });
+  } else {
+    res.status(401);
+    throw new Error("Email or password is not valid");
+  }
+});
+
+module.exports.mentee = MenteeLoginController;
+module.exports.mentor = MentorLoginController;
