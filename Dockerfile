@@ -16,5 +16,8 @@ COPY . .
 # Expose the port your app runs on
 EXPOSE 3000
 
+# Set environment variable for MongoDB connection URI
+ENV MONGODB_URI="mongodb://mongo_host:27017/mydatabase"
+
 # Command to run your application
 CMD ["npm", "run", "dev"]
