@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    ports:
+      - "5001:${PORT}"
+    environment:
+      - PORT=${PORT}
+      - CONNECTION_STRING=${CONNECTION_STRING}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-data:/data/db
